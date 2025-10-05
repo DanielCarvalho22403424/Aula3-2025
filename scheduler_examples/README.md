@@ -35,3 +35,6 @@ Aplicação Métrica (segs)    FIFO    SJF     RR      MLFQ
 4       Tempo Resposta      N.D.    N.D.    N.D.    12,14
 
 ```
+
+
+#### Nos tempos médios de execução e de resposta de quatro aplicações, SJF se destaca em processos CPU-bound, apresentando os menores tempos de execução, enquanto RR e MLFQ têm valores maiores devido à preempção, mas garantem respostas mais rápidas. FIFO, apesar da simplicidade, apresenta tempos de resposta mais elevados quando processos longos chegam primeiro. Em aplicações I/O-bound, o MLFQ reduz tanto o tempo de execução quanto o de resposta ao alternar eficientemente entre processos prontos e bloqueados, equilibrando desempenho e interatividade.
