@@ -1,96 +1,37 @@
-# Scheduler Simulator
+# Trabalho 1 SO DANIEL CARVALHO a22403424
 
-The objective of this project is to simulate various CPU scheduling algorithms and
-analyze their performance based on different metrics. The simulator allows users to
-input a set of processes with their respective arrival times, burst times, and priorities,
-and then applies different scheduling algorithms to determine the order of execution.
 
-## Message Format
-Each message sends the application PID, the message request type and a time parameter.
-Since we are using Unix Domain Sockets (sender and receiver on the same machine), we can
-safely pass structs between the application and the simulator.
 
-### Messages from the application to the simulator:
-The messages from the application to the simulator (RUN/BLOCK) send the time in ms
-that the process requests the CPU or the I/O device.
-Although this is not completely realistic, it simplifies the implementation of the simulator
-and allows us to focus on the scheduling algorithms.
+## FIFO
+### Executa os processos pela ordem de chegada, cada um até terminar. Simples, mas tarefas longas podem atrasar as curtas.
 
-### Messages from the simulator to the application:
-The messages from the simulator to the application (ACK/EXIT) send the current time in ms
-in the simulation ("wall clock"). This allows the application to keep track of the time even if
-we take some time debugging the code.
+## SJF
+### Escolhe sempre o processo que vai terminar mais rápido. Reduz tempo de espera médio, mas processos longos podem sofrer starvation.
 
-## Time Diagram
-The time diagram below illustrates the interaction between the application and the simulator:
+## RR
+### Cada processo recebe um time slice fixo. Quando o tempo acaba, vai para o fim da fila e o próximo ocupa o CPU. Equitativo e bom para interatividade.
+
+## MLFQ
+### Usa várias filas de prioridade. Processos que usam muito CPU descem de nível; processos que esperam sobem. Adapta-se dinamicamente entre eficiência e justiça.
+
+
 
 ```
-Simulator                           Applications
-   |                                    |
-   | <---- App1 RUN (run time) -------- |
-   |                                    |
-   | ---- App1 ACK (current time) ----> |
-   |                                    |
-   | <---- App2 RUN (run time) -------- |
-   |                                    |
-   | ---- App2 ACK (current time) ----> |
-   |                                    |
-   | ---- App1 DONE (current time) ---> |   --> App 1 prints its statistics and terminates
-   |                                    |
-   | ---- App2 DONE (current time) ---> |   --> App 2 prints its statistics and terminates
-   |
- (keeps running)
-   ```
 
-## Scheduling Algorithms
+1 run_apps.sh
+2 run_apps2.sh
+3 run_appsio.sh
+4 run_appsio2.sh
 
-### FIFO (First In First Out)
-The FIFO scheduling algorithm processes tasks in the order they arrive. The first task to arrive is the
-first to be executed.
-This is already implemented in the simulator.
-
-### SJF (Shortest Job First)
-The SJF scheduling algorithm selects the task with the shortest burst time to execute next.
-
-### Round Robin
-The Round Robin scheduling algorithm assigns a fixed time slice to each task in the queue. Each task
-is executed for a maximum of the time slice before being moved to the back of the queue.
-In the simulator, create a first version of Round Robin with a time slice of 0.5s.
-
-### MLFQ (Multi-Level Feedback Queue)
-The MLFQ scheduling algorithm uses multiple queues with different priority levels. The app to be used
-here is app-pre, which not only sends burst times, but also block times. The app-pre has a filename as
-command line argument, which contains on each line the burst time and the block time (in ms) of each cycle.
-Start by using time-slices of 0.5s.
-
-Hint: The diagram used here is slightly different from the one used in class, as it includes not only RUN
-messages, but also BLOCK messages. The BLOCK messages are used to simulate I/O operations.
+ 
+Aplicação Métrica (segs)    FIFO    SJF     RR      MLFQ
+1       Tempo Execução      29,06   26,67   38,33   38,00  
+1       Tempo Resposta      13,26   11,67   11,67   11,67
+2       Tempo Execução      20,50   15,50   23,75   23,91   
+2       Tempo Resposta      14,00   9,00    9,00    9,00
+3       Tempo Execução      N.D.    N.D.    N.D.    7,60
+3       Tempo Resposta      N.D.    N.D.    N.D.    3,27
+4       Tempo Execução      N.D.    N.D.    N.D.    16,81
+4       Tempo Resposta      N.D.    N.D.    N.D.    12,14
 
 ```
-Simulator                           Applications
-   |                                    |
-   | <---- App1 RUN (run time) -------- |
-   |                                    |
-   | ---- App1 ACK (current time) ----> |
-   |                                    |
-   | <---- App2 RUN (run time) -------- |
-   |                                    |
-   | ---- App2 ACK (current time) ----> |
-   |                                    |
-   | ---- App1 DONE (current time) ---> | 
-   |                                    |
-   | <---- App1 BLOCK (run time) ------ |
-   |                                    |
-   | ---- App1 ACK (current time) ----> |
-   |                                    |
-   | ---- App2 DONE (current time) ---> | 
-   |                                    |
-   | <---- App2 BLOCK (run time) ------ |
-   |                                    |
-   | ---- App2 ACK (current time) ----> |
-   |                                    |
-   | ---- App1 DONE (current time) ---> | 
-   |                                    |
-   | ---- App2 DONE (current time) ---> | 
-```
-

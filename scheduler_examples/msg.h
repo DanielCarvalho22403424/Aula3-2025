@@ -4,7 +4,9 @@
 // Not really the correct place, but this file is included where it is necessary,
 // and it did not feel like making a new file just for this was justified.
 
+//todo trocar isto
 #define TICKS_MS 10
+#define TIME_SLICE 500
 
 #include <stdint.h>
 #include <sys/types.h>

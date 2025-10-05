@@ -32,6 +32,10 @@ int enqueue_pcb(queue_t* q, pcb_t* task) {
     return 1;
 }
 
+int queuIsEmpty(queue_t *q) {
+    return (q == NULL) || (q->head == NULL);
+}
+
 pcb_t* dequeue_pcb(queue_t* q) {
     if (!q || !q->head) return NULL;
 

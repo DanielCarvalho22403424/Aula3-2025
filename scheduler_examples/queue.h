@@ -19,6 +19,7 @@ typedef struct pcb_st{
     uint32_t slice_start_ms;       // Time when the current time slice started
     uint32_t sockfd;               // Socket file descriptor for communication with the application
     uint32_t last_update_time_ms;  // Last time the PCB was updataed
+    int priority;                  // para o mlfq
 } pcb_t;
 
 // Define singly linked list elements
@@ -79,6 +80,11 @@ pcb_t* dequeue_pcb(queue_t* q);
  * @return The removed element, or NULL if the element was not found
  */
 queue_elem_t *remove_queue_elem(queue_t* q, queue_elem_t* elem);
+
+
+
+int queuIsEmpty(queue_t *q);
+
 
 
 #endif //QUEUE_H
